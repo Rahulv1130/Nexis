@@ -1,0 +1,130 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum PostStatus {
+  PENDING
+  APPROVED
+  FLAGGED
+  REMOVED
+}
+
+enum ViolationType {
+  HATE_SPEECH
+  HARASSMENT
+  SPAM
+  MISINFORMATION
+  EXPLICIT_CONTENT
+  VIOLENCE
+  OTHER
+}
+
+enum ModerationAction {
+  APPROVE
+  FLAG
+  REMOVE
+  WARN_USER
+  BAN_USER
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  username      String    @unique
+  passwordHash  String?
+  role          Role      @default(USER)
+  oauthProvider String?
+  oauthId       String?
+  avatar        String?
+  trustScore    Float     @default(50.0)
+  isBanned      Boolean   @default(false)
+  bannedUntil   DateTime?
+  warningCount  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  posts         Post[]
+  moderations   ModerationLog[]
+  reports       Report[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Community {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  rules       String[] 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  posts       Post[]
+}
+
+model Post {
+  id              String     @id @default(uuid())
+  content         String
+  imageUrl        String?
+  status          PostStatus @default(PENDING)
+  aiScore         Float?     // 0-1 toxicity score from AI
+  aiAnalysis      Json?      // Full AI analysis object
+  violationType   ViolationType?
+  autoModerated   Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  authorId        String
+  author          User       @relation(fields: [authorId], references: [id])
+  communityId     String
+  community       Community  @relation(fields: [communityId], references: [id])
+  moderations     ModerationLog[]
+  reports         Report[]
+
+  @@index([status])
+  @@index([authorId])
+  @@index([communityId])
+  @@index([createdAt])
+}
+
+model ModerationLog {
+  id          String           @id @default(uuid())
+  action      ModerationAction
+  reason      String?
+  aiAssisted  Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+
+  postId      String
+  post        Post             @relation(fields: [postId], references: [id])
+  moderatorId String
+  moderator   User             @relation(fields: [moderatorId], references: [id])
+
+  @@index([postId])
+  @@index([moderatorId])
+  @@index([createdAt])
+}
+
+model Report {
+  id        String   @id @default(uuid())
+  reason    String
+  createdAt DateTime @default(now())
+
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+}
