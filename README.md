@@ -284,4 +284,4 @@ npm run dev
 
 ---
 
-*Built by [Rahul Verma] for the Nebula9.ai Full Stack GenAI Developer Internship — May 2026*
+*Built by [Rahul Verma] as an Assignment for the Nebula9.ai Full Stack GenAI Developer Internship — May 2026*
