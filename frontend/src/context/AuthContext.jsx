@@ -8,14 +8,6 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Handle OAuth callback token
-    const params = new URLSearchParams(window.location.search);
-    const oauthToken = params.get('token');
-    if (oauthToken) {
-      localStorage.setItem('token', oauthToken);
-      window.history.replaceState({}, '', '/');
-    }
-
     const token = localStorage.getItem('token');
     if (token) {
       authAPI.getMe()

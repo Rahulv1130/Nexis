@@ -10,6 +10,7 @@ import CommunityPage from './pages/Community.jsx';
 import AnalyticsPage from './pages/Analytics.jsx';
 import UserProfilePage from './pages/UserProfile.jsx';
 import CreatePostPage from './pages/CreatePost.jsx';
+import AuthCallback from './components/AuthCallback.jsx';
 
 function ProtectedRoute({ children, roles }) {
   const { user, loading } = useAuth();
@@ -25,7 +26,7 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/auth/callback" element={<LoginPage />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route index element={<DashboardPage />} />
             <Route path="queue" element={<ProtectedRoute roles={['MODERATOR', 'ADMIN']}><ModerationQueuePage /></ProtectedRoute>} />
