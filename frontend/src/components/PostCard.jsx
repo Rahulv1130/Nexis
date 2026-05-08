@@ -13,7 +13,7 @@ const StatusBadge = ({ status, role }) => {
     REMOVED: 'bg-red-500/10 text-red-500 border-red-500/20'
   };
 
-  if(role =='USER') status = 'Under Review';
+  if(role =='USER' && status !=='REMOVED') status = 'Under Review';
 
   const colorClass = statusColors[status] || 'bg-yellow-500/10 text-tellow-500 border-yellow-500/20';
 
