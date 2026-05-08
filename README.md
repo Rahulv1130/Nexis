@@ -4,6 +4,15 @@
 
 An intelligent community moderation platform that uses *GEMINI* to automatically analyze, score, and action user-submitted content — with a full moderator dashboard, role-based access control, audit logging, and analytics.
 
+---
+
+## Live Demo
+
+| | Link |
+|---|---|
+| **Frontend** | https://nexis-lilac.vercel.app |
+| **Backend** | https://nexis-f2k2.onrender.com |
+| **Demo Video** | https://drive.google.com/file/d/1VtrK-bOs6kWHM_7OxJyuWUH5hJSvBXjN/view?usp=drive_link |
 
 
 ---
