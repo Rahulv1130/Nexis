@@ -12,7 +12,7 @@ export default function AuthCallback() {
       localStorage.setItem("token", token);
       navigate("/");
     } else {
-    //   navigate("/login");
+      navigate("/login");
     }
   }, []);
 
